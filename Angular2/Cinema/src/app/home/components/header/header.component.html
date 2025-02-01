@@ -1,0 +1,36 @@
+<header class="header bg-black"> 
+    <div class="container">
+        <div class="brand">
+            <a  class="text-dark text-decoration-none" routerLink="/home">
+                <h1>IMAGIX</h1> 
+                <h3>CINEMA</h3>
+            </a>
+        </div>
+        <nav class="navigation"> 
+            <ul>
+                <li><a  class="text-white text-decoration-none" routerLink="/home" >Головна</a></li>
+                <li><a  class="text-white text-decoration-none" routerLink="/schedule" >Розклад</a></li>       
+                <li><a  class="text-white text-decoration-none" routerLink="/movies" >фільми</a></li>  
+                <li><a  class="text-white text-decoration-none"  routerLink="/contacts">Контакти</a></li>
+            </ul>   
+        </nav>
+        <div class="items">
+            <div class="search-box">
+                <input type="text" class="input-search" placeholder="Пошук...">
+                
+                <button class="btn-search"><i class="fa fa-search" onclick={!search}></i></button>
+                
+            </div>
+            <div class="cart-icon">
+                <a href="#Shop">
+                    <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="user-icon">
+                <a href="#Profile">
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

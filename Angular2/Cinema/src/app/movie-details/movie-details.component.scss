@@ -1,0 +1,138 @@
+/* movie-details.component.scss */
+.movie-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  
+    .movie-details {
+      margin-bottom: 40px;
+  
+      .movie-info {
+        display: flex;
+        gap: 20px;
+  
+        img {
+          width: 200px;
+          height: 300px;
+          object-fit: cover;
+        }
+  
+        .details {
+          p {
+            margin: 10px 0;
+            font-size: 1.1em;
+          }
+        }
+      }
+    }
+  }
+  
+  .booking-section {
+    .screen {
+      background: #ccc;
+      height: 70px;
+      width: 100%;
+      margin: 15px 0 30px;
+      transform: rotateX(-30deg);
+      box-shadow: 0 3px 10px rgba(255,255,255,0.7);
+      text-align: center;
+      line-height: 70px;
+      color: #fff;
+    }
+  
+    .seating-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      margin: 20px 0;
+  
+      .seat-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+  
+        .row-label {
+          width: 30px;
+          text-align: center;
+        }
+  
+        .seat {
+          width: 35px;
+          height: 35px;
+          border-radius: 5px;
+          background: #444451;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+  
+          &:hover {
+            background: #2ecc71;
+          }
+  
+          &.occupied {
+            background: #e74c3c;
+            cursor: not-allowed;
+          }
+  
+          &.selected {
+            background: #2ecc71;
+          }
+        }
+      }
+    }
+  }
+  
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+  
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  
+      .seat {
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        background: #444451;
+  
+        &.occupied {
+          background: #e74c3c;
+        }
+  
+        &.selected {
+          background: #2ecc71;
+        }
+      }
+    }
+  }
+  
+  .booking-summary {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+  
+    .book-btn {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background: #27ae60;
+      }
+    }
+  }

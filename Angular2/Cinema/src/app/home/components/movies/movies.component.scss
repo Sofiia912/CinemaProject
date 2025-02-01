@@ -1,0 +1,150 @@
+$primary-color: #2c3e50;
+$secondary-color: #34495e;
+$background-color: #f5f6fa;
+$text-color: #2d3436;
+$hover-color: #e74c3c;
+$shadow: rgba(0, 0, 0, 0.1);
+
+.hh{
+  color: $text-color;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 1rem;
+  margin: 0;
+  text-align: center;
+  background: $background-color;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: $background-color;
+    
+    
+    .movie-card {
+      
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 3px 8px $shadow;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            
+            img {
+                transform: scale(1.05);
+            }
+        }
+        
+        .movie-image {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+        }
+        
+        .movie-info {
+            padding: 1rem;
+            
+            h4 {
+                margin: 0 0 0.75rem;
+                font-size: 1.2rem;
+                font-weight: 600;
+                
+                a {
+                    color: $primary-color;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+                    
+                    &:hover {
+                        color: $hover-color;
+                    }
+                }
+            }
+            
+            p {
+                margin: 0.5rem 0;
+                color: $text-color;
+                font-size: 0.95rem;
+                line-height: 1.4;
+                
+                &.genre {
+                    color: $secondary-color;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+        
+        .movie-card {
+            .movie-info {
+                padding: 0.75rem;
+                
+                h4 {
+                    font-size: 1rem;
+                    margin-bottom: 0.5rem;
+                }
+                
+                p {
+                    font-size: 0.85rem;
+                    margin: 0.25rem 0;
+                }
+            }
+        }
+    }
+}// /* Картка фільму */
+// .movie-item {
+//     background-color: #1c1c1c;
+//     border-radius: 10px;
+//     overflow: hidden;
+//     text-align: center;
+//     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+//     transition: transform 0.3s ease, box-shadow 0.3s ease;
+//     cursor: pointer;
+// }
+
+// .movie-item:hover {
+//     transform: translateY(-10px);
+//     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+// }
+
+// .movie-poster {
+//     width: 100%;
+//     height: 350px;
+//     object-fit: cover;
+//     transition: transform 0.3s ease;
+//     border-bottom: 5px solid #ffcc00;
+// }
+
+// .movie-item:hover .movie-poster {
+//     transform: scale(1.05);
+// }
+
+// h3 {
+//     font-size: 1.4rem;
+//     margin-top: 15px;
+//     color: #ffcc00;
+// }
+
+// p {
+//     font-size: 1rem;
+//     color: #bbb;
+//     margin: 5px 0;
+// }
