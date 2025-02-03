@@ -20,20 +20,5 @@ export class MoviesComponent {
       this.movies = movies;
     })
   }
-  // constructor(private moviesService: MoviesService) {}
 
-  // ngOnInit(): void {
-  //   this.fetchMovies(); // Завантаження списку фільмів під час ініціалізації
-  // }
-
-  // fetchMovies(): void {
-  //   this.moviesService.getMoviesList().subscribe({
-  //     next: (data: MovieListItem[]) => {
-  //       this.movies = data; // Отриманий масив присвоюється змінній `movies`
-  //     },
-  //     error: (error: any) => {
-  //       console.error('Помилка при отриманні списку фільмів:', error);
-  //     },
-  //   });
-  // }
 }

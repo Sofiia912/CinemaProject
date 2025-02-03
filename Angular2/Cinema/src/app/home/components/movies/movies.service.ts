@@ -12,5 +12,11 @@ export class MoviesService {
             'http://localhost:5001/movies'
         );
     }
+    getMovieByName(term: string): Observable<MovieListItem[]> {
+        return this.httpClient.get<MovieListItem[]>(
+            `http://localhost:5001/movies/search/${term}`
+        );
+    }
+    
     
 }

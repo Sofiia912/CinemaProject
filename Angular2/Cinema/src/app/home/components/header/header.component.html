@@ -8,15 +8,15 @@
         </div>
         <nav class="navigation"> 
             <ul>
-                <li><a  class="text-white text-decoration-none" routerLink="/home" >Головна</a></li>
-                <li><a  class="text-white text-decoration-none" routerLink="/schedule" >Розклад</a></li>       
-                <li><a  class="text-white text-decoration-none" routerLink="/movies" >фільми</a></li>  
+                <li><a  class="text-white text-decoration-none" routerLink="home">Головна</a></li>
+                <li><a  class="text-white text-decoration-none" routerLink="/schedule">Розклад</a></li>       
+                <li><a  class="text-white text-decoration-none" routerLink="/movies">Фільми</a></li>  
                 <li><a  class="text-white text-decoration-none"  routerLink="/contacts">Контакти</a></li>
             </ul>   
         </nav>
         <div class="items">
             <div class="search-box">
-                <input type="text" class="input-search" placeholder="Пошук...">
+            <input type="text" class="input-search" placeholder="Пошук..." [(ngModel)]="inputValue" (input)="handleInputChange()">
                 
                 <button class="btn-search"><i class="fa fa-search" onclick={!search}></i></button>
                 
@@ -33,4 +33,29 @@
             </div>
         </div>
     </div>
+    
 </header>
+
+<!-- Відображення знайдених фільмів -->
+<div *ngIf="movies.length > 0">
+    <h2 class="hh">Результати пошуку:</h2>
+    <div class="search-results">
+        <div *ngFor="let movie of movies" class="movie-card">
+            <div class="movie-image">
+                <a href="#">
+                    <img [src]="'../../../posters/'+ movie.PosterImg + '.jpeg'"alt="{{movie.Title}}">
+                </a>
+            </div>
+            <div class="movie-info">
+                <h4><a href="#">{{movie.Title}}</a></h4>
+                <p class="genre">Жанр: {{movie.Genre}}</p>
+                <p>Режисер: {{movie.Director}}</p>
+                <p>Дата виходу: {{movie.ReleaseDate | date:'dd-MM-yyyy'}}</p>
+            </div>
+        </div>
+   </div>
+</div>
+<div *ngIf="movies.length === 0 && inputValue.trim().length > 0">
+    
+    <p class="hh">Фільм не знайдено 😞</p>
+</div>
