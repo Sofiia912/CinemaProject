@@ -3,21 +3,21 @@ import { RouterLink  } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MoviesService } from '../movies/movies.service';
 import { MovieListItem } from '../movies/movies.type';
-import {  HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, HttpClientModule, CommonModule, FormsModule],
+  imports: [RouterLink, HttpClientModule, CommonModule, FormsModule,],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   providers: [MoviesService]
 })
 export class HeaderComponent {
- 
   movies: MovieListItem[] = [];  // Масив для результатів пошуку
   inputValue: string = '';
-
+  
   constructor(private moviesService: MoviesService) {}
 
   handleInputChange() {
@@ -34,9 +34,15 @@ export class HeaderComponent {
       );
     } else {
       this.movies = [];
-    }
+    } 
   }
+  onMovieSelect() {
+    this.movies = [];
+    this.inputValue = '';  // Очистити поле вводу
+  }
+  
 }
+
   
 
 

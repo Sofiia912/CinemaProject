@@ -1,52 +1,51 @@
-<!-- movie-details.component.html
-<div class="movie-container">
-    <div class="movie-details">
-      <h2>{{movie.title}}</h2>
-      <div class="movie-info">
-        <img [src]="movie.poster" alt="{{movie.title}}">
-        <div class="details">
-          <p class="rating">Rating: {{movie.rating}}</p>
-          <p class="duration">Duration: {{movie.duration}}</p>
-          <p class="genre">Genre: {{movie.genre}}</p>
-        </div>
-      </div>
-    </div>
-  
-    <div class="booking-section">
-      <div class="screen">Screen</div>
-      
-      <div class="seating-layout">
-        <div *ngFor="let row of seatLayout; let i = index" class="seat-row">
-          <span class="row-label">{{getRowLabel(i)}}</span>
-          <div *ngFor="let seat of row; let j = index" 
-               class="seat" 
-               [class.occupied]="seat.occupied"
-               [class.selected]="seat.selected"
-               (click)="toggleSeat(i, j)">
-            {{j + 1}}
+<div *ngIf="movie; else notFound" class="movie-details-container">
+  <div class="movie-main">
+    <img class="poster" [src]="'../../../posters/' + movie.PosterImg + '.jpeg'" alt="{{ movie.Title }}">
+      <div class="details">
+        <h1>{{ movie.Title }}</h1>
+          <div class="movie-info-grid">
+            <p><strong>Дата виходу:</strong> {{ movie.ReleaseDate | date:'dd-MM-yyyy' }}</p>
+            <p><strong>Мова:</strong> {{ movie.Language }}</p>
+            <p><strong>Режисер:</strong> {{ movie.Director }}</p>
+            <p><strong>Жанр:</strong> {{ movie.Genre }}</p>
+            <p><strong>Тривалість:</strong> {{ movie.Duration }} хв.</p>
           </div>
-        </div>
+          <p class="movie-description">
+            <strong>Опис:</strong> 
+            {{ movie.Description }}</p>
       </div>
-  
-      <div class="legend">
-        <div class="legend-item">
-          <div class="seat"></div>
-          <span>Available</span>
-        </div>
-        <div class="legend-item">
-          <div class="seat occupied"></div>
-          <span>Occupied</span>
-        </div>
-        <div class="legend-item">
-          <div class="seat selected"></div>
-          <span>Selected</span>
-        </div>
+  </div>
+
+
+  <div class="schedule-section">
+    <h2>Розклад сеансів</h2>
+    <!-- <div *ngIf="sessions.length > 0; else noSessions">
+      <div class="session-list">
+        <a *ngFor="let session of sessions" [routerLink]="'/buy-ticket/' + session.id" class="session-time">
+          {{ session.time }} - {{ session.format }}
+        </a>
       </div>
-  
-      <div class="booking-summary" *ngIf="selectedSeats.length > 0">
-        <p>Selected Seats: {{getSelectedSeatsLabel()}}</p>
-        <p>Total Amount: ${{getTotalAmount()}}</p>
-        <button class="book-btn" (click)="confirmBooking()">Confirm Booking</button>
-      </div>
+    </div> -->
+    <ng-template #noSessions>
+      <p>Сеанси відсутні.</p>
+    </ng-template>
+  </div>
+
+  <div class="other-movies">
+    <h2>Дивіться також</h2>
+    <div class="movie-grid">
+      <div *ngFor="let otherMovie of otherMovies" class="movie-card">
+        <a [routerLink]="'/movie/' + otherMovie.MovieID">
+          <img [src]="'../../../posters/' + otherMovie.PosterImg + '.jpeg'" alt="{{ otherMovie.Title }}">
+        </a>
+        <div class="movie-info">
+          <h4><a [routerLink]="'/movie/' + otherMovie.MovieID">{{ otherMovie.Title }}</a></h4>
+        </div>
+      </div>   
     </div>
-  </div> -->
+  </div>
+</div>
+
+<ng-template #notFound>
+  <p>Фільм не знайдено.</p>
+</ng-template>

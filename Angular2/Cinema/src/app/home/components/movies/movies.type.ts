@@ -5,5 +5,7 @@ export interface MovieListItem {
     Genre: string[];
     PosterImg: string;
     Director: string;
-    
+    Description: string;
+    Duration: number;
+    Language: string;
 }

@@ -8,7 +8,7 @@
         </div>
         <nav class="navigation"> 
             <ul>
-                <li><a  class="text-white text-decoration-none" routerLink="home">Головна</a></li>
+                <li><a  class="text-white text-decoration-none" routerLink="/home">Головна</a></li>
                 <li><a  class="text-white text-decoration-none" routerLink="/schedule">Розклад</a></li>       
                 <li><a  class="text-white text-decoration-none" routerLink="/movies">Фільми</a></li>  
                 <li><a  class="text-white text-decoration-none"  routerLink="/contacts">Контакти</a></li>
@@ -40,14 +40,14 @@
 <div *ngIf="movies.length > 0">
     <h2 class="hh">Результати пошуку:</h2>
     <div class="search-results">
-        <div *ngFor="let movie of movies" class="movie-card">
+        <div *ngFor="let movie of movies" (click)="onMovieSelect()" class="movie-card">
             <div class="movie-image">
-                <a href="#">
+                <a [routerLink]="'/movie/' + movie.MovieID">
                     <img [src]="'../../../posters/'+ movie.PosterImg + '.jpeg'"alt="{{movie.Title}}">
                 </a>
             </div>
             <div class="movie-info">
-                <h4><a href="#">{{movie.Title}}</a></h4>
+                <h4><a [routerLink]="'/movie/' + movie.MovieID">{{movie.Title}}</a></h4>
                 <p class="genre">Жанр: {{movie.Genre}}</p>
                 <p>Режисер: {{movie.Director}}</p>
                 <p>Дата виходу: {{movie.ReleaseDate | date:'dd-MM-yyyy'}}</p>
@@ -57,5 +57,5 @@
 </div>
 <div *ngIf="movies.length === 0 && inputValue.trim().length > 0">
     
-    <p class="hh">Фільм не знайдено 😞</p>
+    <p class="hh">Фільм не знайдено 😞.</p>
 </div>

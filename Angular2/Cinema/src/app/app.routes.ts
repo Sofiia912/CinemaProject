@@ -4,6 +4,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { MoviesComponent } from './home/components/movies/movies.component';
+import { MovieDetailsComponent } from './movie-details/movie-details.component';
 
 export const routes: Routes = [
         { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -11,5 +12,7 @@ export const routes: Routes = [
         { path: 'schedule', component: ScheduleComponent },
         { path: 'movies', component: MoviesComponent },
         { path: 'contacts', component: ContactsComponent },
-        { path: '**',redirectTo: 'home'}
+        { path: 'movie/:MovieID', component: MovieDetailsComponent},     
+        { path: 'not-found', component: NotFoundComponent },
+        { path: '**', redirectTo: 'not-found'}
 ];

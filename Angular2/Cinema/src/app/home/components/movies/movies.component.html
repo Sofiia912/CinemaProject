@@ -2,12 +2,12 @@
 <div class="movie-grid">
     <div *ngFor="let movie of movies" class="movie-card">
         <div class="movie-image">
-            <a href="#">
+            <a [routerLink]="'/movie/' + movie.MovieID">
                 <img [src]="'../../../posters/'+ movie.PosterImg + '.jpeg'"alt="{{movie.Title}}">
             </a>
         </div>
         <div class="movie-info">
-            <h4><a href="#">{{movie.Title}}</a></h4>
+            <h4><a [routerLink]="'/movie/' + movie.MovieID"> {{movie.Title}}</a></h4>
             <p class="genre">Жанр: {{movie.Genre}}</p>
             <p>Режисер: {{movie.Director}}</p>
             <p>Дата виходу: {{movie.ReleaseDate | date:'dd-MM-yyyy'}}</p>
