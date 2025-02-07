@@ -45,7 +45,7 @@ export class MovieDetailsComponent {
   loadOtherMovies() {
     this.moviesService.getMoviesList().subscribe(
       (movies) => {
-        this.otherMovies = this.getRandomMovies(movies, 7);
+        this.otherMovies = this.getRandomMovies(movies, 5);
       },
       (error) => {
         console.error('Помилка завантаження фільмів:', error);

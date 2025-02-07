@@ -43,11 +43,6 @@ export class HeaderComponent {
   
 }
 
-  
-
-
-
-
 //  handleInputChange(){
 //   this.moviesService.getMovieByName(this.inputValue).subscribe((movies) => {
 //     this.movies = movies

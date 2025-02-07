@@ -1,54 +1,6 @@
-
-
-// // Update movie
-// router.put('/:id', async (req, res) => {
-//   try {
-//     const { title, description, duration, genre, release_date, poster_url } = req.body;
-//     await pool.query(
-//       'UPDATE movies SET title = ?, description = ?, duration = ?, genre = ?, release_date = ?, poster_url = ? WHERE id = ?',
-//       [title, description, duration, genre, release_date, poster_url, req.params.id]
-//     );
-//     const [updatedMovie] = await pool.query('SELECT * FROM movies WHERE id = ?', [req.params.id]);
-//     res.json(updatedMovie[0]);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
-
-
-
-
-
-// // Create new movie
-// router.post('/', async (req, res) => {
-//   try {
-//     const { Title, Description, Duration, Genre, ReleaseDate, PosterImg } = req.body;
-//     const [result] = await pool.query(
-//       'INSERT INTO movies (Title, Description, Duration, Genre, ReleaseDate, PosterImg) VALUES (?, ?, ?, ?, ?, ?)',
-//       [Title, Description, Duration, Genre, ReleaseDate, PosterImg]
-//     );
-//     const [newMovie] = await pool.query('SELECT * FROM movies WHERE id = ?', [result.insertId]);
-//     res.status(200).json(newMovie[0]);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
-
 const express = require('express');
-const mysql = require('mysql2/promise');
+const pool = require('./database');
 const movies = express.Router();
-
-// Налаштування з'єднання з базою даних
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'cinema',
-    port: 3306,
-    multipleStatements: true
-});
 
 // Отримати всі фільми
 movies.get('/', async (req, res) => {
@@ -58,6 +10,21 @@ movies.get('/', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+});
+
+// // Update movie
+movies.put('/:MovieID', async (req, res) => {
+  try {
+    const { Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language } = req.body;
+    await pool.query(
+      'UPDATE movies SET Title = ?, Description = ?, Duration = ?, Genre = ?, ReleaseDate = ?, Director = ?, PosterImg = ?, Language = ? WHERE MovieID = ?',
+      [Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language, req.params.MovieID]
+    );
+    const [updatedMovie] = await pool.query('SELECT * FROM movies WHERE MovieID = ?', [req.params.MovieID]);
+    res.json(updatedMovie[0]);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 //  стоворення нового фільму new 
