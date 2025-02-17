@@ -5,6 +5,7 @@ import { ContactsComponent } from './contacts/contacts.component';
 import { MoviesComponent } from './home/components/movies/movies.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { SessionsComponent } from './sessions/sessions.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 export const routes: Routes = [
@@ -13,7 +14,8 @@ export const routes: Routes = [
         { path: 'schedule', component: SessionsComponent },
         { path: 'movies', component: MoviesComponent },
         { path: 'contacts', component: ContactsComponent },
-        { path: 'movie/:MovieID', component: MovieDetailsComponent},     
+        { path: 'movie/:MovieID', component: MovieDetailsComponent}, 
+        { path: 'settings', component: SettingsComponent },    
         { path: 'not-found', component: NotFoundComponent },
         { path: '**', redirectTo: 'not-found'}
 ];

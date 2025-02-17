@@ -28,5 +28,17 @@ export class MoviesService {
     //Запит на отримання деталей фільму за ID
     getMovieById(MovieID: string): Observable<MovieListItem> {
         return this.httpClient.get<MovieListItem>(`${this.apiUrl}/${MovieID}`);
-    }  
+    } 
+    
+    addMovie(movie: Omit<MovieListItem, 'MovieID'>): Observable<MovieListItem> {
+        return this.httpClient.post<MovieListItem>(this.apiUrl, movie);
+    }
+
+    editMovie(movie: MovieListItem): Observable<MovieListItem> {
+        return this.httpClient.put<MovieListItem>(`${this.apiUrl}/${movie.MovieID}`, movie);
+    }
+
+    deleteMovie(movieId: number): Observable<void> {
+        return this.httpClient.delete<void>(`${this.apiUrl}/${movieId}`);
+    } 
 }
