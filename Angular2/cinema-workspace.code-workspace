@@ -7,5 +7,7 @@
 			"path": "Cinema"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Cinema"
+	}
 }

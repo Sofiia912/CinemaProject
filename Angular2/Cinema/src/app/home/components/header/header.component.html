@@ -1,61 +1,57 @@
-<header class="header bg-black"> 
+<header class="header">
     <div class="container">
         <div class="brand">
-            <a  class="text-dark text-decoration-none" routerLink="/home">
-                <h1>IMAGIX</h1> 
+            <a routerLink="/home">
+                <h1>IMAGIX</h1>
                 <h3>CINEMA</h3>
             </a>
         </div>
-        <nav class="navigation"> 
+
+        <nav class="navigation">
             <ul>
-                <li><a  class="text-white text-decoration-none" routerLink="/home">Головна</a></li>
-                <li><a  class="text-white text-decoration-none" routerLink="/schedule">Розклад</a></li>       
-                <li><a  class="text-white text-decoration-none" routerLink="/movies">Фільми</a></li>  
-                <li><a  class="text-white text-decoration-none"  routerLink="/contacts">Контакти</a></li>
-            </ul>   
+                <li><a routerLink="/home" routerLinkActive="active">Головна</a></li>
+                <li><a routerLink="/sessions" routerLinkActive="active">Розклад</a></li>
+                <li><a routerLink="/movies" routerLinkActive="active">Фільми</a></li>
+                <li><a routerLink="/contacts" routerLinkActive="active">Контакти</a></li>
+                <li *ngIf="auth.user()?.Role === 'admin'">
+                    <a routerLink="/settings" routerLinkActive="active">
+                        <i class="fa fa-cog"></i> Налаштування
+                    </a>
+                </li>
+            </ul>
         </nav>
-        <div class="items">
+
+        <div class="actions">
             <div class="search-box">
-            <input type="text" class="input-search" placeholder="Пошук..." [(ngModel)]="inputValue" (input)="handleInputChange()">
-                
-                <button class="btn-search"><i class="fa fa-search" onclick={!search}></i></button>
-                
+                <input type="text" placeholder="Пошук фільму..." [(ngModel)]="inputValue"
+                    (input)="handleInputChange()" />
+                <button type="button" (click)="handleInputChange()">
+                    <i class="fa fa-search"></i>
+                </button>
+
+                <div class="autocomplete" *ngIf="inputValue.trim().length > 0">
+                    <div class="item" *ngFor="let movie of movies" (click)="goToMovie(movie.MovieID)">
+                        <img [src]="'../../../posters/' + movie.PosterImg + '.jpeg'" alt="{{ movie.Title }}" />
+                        <span>{{ movie.Title }}</span>
+                    </div>
+                    <div class="item no-results-item" *ngIf="!movies.length && inputValue.trim().length > 0">
+                        <i class="fa fa-frown-o"></i>
+                        <span>Нічого не знайдено за «{{ inputValue }}»</span>
+                    </div>
+                </div>
             </div>
-            <div class="cart-icon">
-                <a href="#Shop">
-                    <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+
+            <div class="user-area">
+                <a *ngIf="auth.isLoggedIn()" routerLink="/profile" class="icon-btn" title="Профіль">
+                    <i class="fa fa-user-circle"></i>
                 </a>
-            </div>
-            <div class="user-icon">
-                <a href="#Profile">
-                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                <button *ngIf="auth.isLoggedIn()" class="btn logout" (click)="onLogout()">
+                    Вийти
+                </button>
+                <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="icon-btn" title="Увійти">
+                    <i class="fa fa-user-circle-o"></i>
                 </a>
             </div>
         </div>
     </div>
-    
 </header>
-
-<!-- Відображення знайдених фільмів -->
-<div *ngIf="movies.length > 0">
-    <h2 class="hh">Результати пошуку:</h2>
-    <div class="search-results">
-        <div *ngFor="let movie of movies" (click)="onMovieSelect()" class="movie-card">
-            <div class="movie-image">
-                <a [routerLink]="'/movie/' + movie.MovieID">
-                    <img [src]="'../../../posters/'+ movie.PosterImg + '.jpeg'"alt="{{movie.Title}}">
-                </a>
-            </div>
-            <div class="movie-info">
-                <h4><a [routerLink]="'/movie/' + movie.MovieID">{{movie.Title}}</a></h4>
-                <p class="genre">Жанр: {{movie.Genre}}</p>
-                <p>Режисер: {{movie.Director}}</p>
-                <p>Дата виходу: {{movie.ReleaseDate | date:'dd-MM-yyyy'}}</p>
-            </div>
-        </div>
-   </div>
-</div>
-<div *ngIf="movies.length === 0 && inputValue.trim().length > 0">
-    
-    <p class="hh">Фільм не знайдено 😞.</p>
-</div>

@@ -1,0 +1,38 @@
+<div class="login-container">
+    <h2 class="login-title">Увійти</h2>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group" [class.error-state]="emailCtrl.invalid && emailCtrl.touched">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="your@example.com" required email
+                [(ngModel)]="email" #emailCtrl="ngModel" />
+            <div class="error-message" *ngIf="emailCtrl.touched">
+                <span *ngIf="emailCtrl.errors?.['required']">Поле обов’язкове</span>
+                <span *ngIf="emailCtrl.errors?.['email']">Неправильний формат email</span>
+            </div>
+        </div>
+
+        <div class="form-group" [class.error-state]="passCtrl.invalid && passCtrl.touched">
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" placeholder="••••••••" required minlength="6"
+                [(ngModel)]="password" #passCtrl="ngModel" />
+            <div class="error-message" *ngIf="passCtrl.touched">
+                <span *ngIf="passCtrl.errors?.['required']">Поле обов’язкове</span>
+                <span *ngIf="passCtrl.errors?.['minlength']">
+                    Мінімум {{ passCtrl.errors?.['minlength'].requiredLength }} символів
+                </span>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="form.invalid" class="btn-submit">
+            Увійти
+        </button>
+
+        <div class="global-error" *ngIf="error">{{ error }}</div>
+
+        <p class="register-link">
+            Немає акаунта?
+            <a routerLink="/register">Зареєструватися</a>
+        </p>
+    </form>
+</div>

@@ -1,112 +1,149 @@
 $primary-color: #2c3e50;
 $secondary-color: #34495e;
+$accent-color: #e60000;
 $background-color: #f5f6fa;
 $text-color: #2d3436;
-$hover-color: #e74c3c;
-$shadow: rgba(0, 0, 0, 0.1);
+$shadow-light: rgba(0, 0, 0, 0.06);
+$shadow-dark: rgba(0, 0, 0, 0.15);
 
-.hh{
-  color: $text-color;
-  font-size: 1.2rem;
-  font-weight: 500;
-  padding: 1rem;
-  margin: 0;
-  text-align: center;
-  background: $background-color;
+// Градієнтний фон для всього розділу
+.movie-section {
+    background: linear-gradient(135deg, #f5f6fa 0%, #dcdde1 100%);
+    padding: 1.7rem 0.75rem; 
 }
 
+// Заголовок секції
+.section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7rem; 
+    font-weight: 700;
+    color: $primary-color;
+    margin: 1.7rem 0 1.15rem; 
+    text-align: center;
+    position: relative;
+
+    &::after {
+        content: '';
+        display: block;
+        width: 48px; 
+        height: 2.8px; 
+        background: $accent-color;
+        margin: 0.38rem auto 0; 
+        border-radius: 2px;
+        box-shadow: 0 2px 4px $shadow-light;
+    }
+}
+
+// Сітка карток
 .movie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: $background-color;
-    
-    
-    .movie-card {
-      
-        background: white;
-        border-radius: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.14rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+// Окрема картка
+.movie-card {
+    background: #fff;
+    border-radius: 9.5px;
+    overflow: hidden;
+    box-shadow: 0 2.85px 9.5px $shadow-light;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        transform: translateY(-5.7px);
+        box-shadow: 0 9.5px 17.1px $shadow-dark; 
+    }
+
+    .movie-image {
+        aspect-ratio: 2/3;
         overflow: hidden;
-        box-shadow: 0 3px 8px $shadow;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        
-        &:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            
-            img {
-                transform: scale(1.05);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.38s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.1);
+        }
+    }
+
+    .movie-info {
+        padding: 0.855rem; 
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        h4 {
+            margin: 0 0 0.427rem; 
+            font-size: 1.026rem; 
+            font-weight: 700;
+            color: $primary-color;
+
+            a {
+                text-decoration: none;
+                color: inherit;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: $accent-color;
+                }
             }
         }
-        
-        .movie-image {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 2/3;
-            
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.5s ease;
-            }
-        }
-        
-        .movie-info {
-            padding: 1rem;
-            
-            h4 {
-                margin: 0 0 0.75rem;
-                font-size: 1.2rem;
+
+        p {
+            margin: 0.3rem 0;
+            color: $text-color;
+            font-size: 0.836rem;
+            line-height: 1.254rem;
+
+            &.genre {
+                color: $secondary-color;
                 font-weight: 600;
-                
-                a {
-                    color: $primary-color;
-                    text-decoration: none;
-                    transition: color 0.2s ease;
-                    
-                    &:hover {
-                        color: $hover-color;
-                    }
-                }
+                text-transform: uppercase;
+                font-size: 0.741rem;
+                margin-bottom: 0.427rem;
             }
-            
-            p {
-                margin: 0.5rem 0;
-                color: $text-color;
-                font-size: 0.95rem;
-                line-height: 1.4;
-                
-                &.genre {
-                    color: $secondary-color;
-                    font-weight: 500;
-                }
+
+            &.release-date {
+                margin-top: auto;
+                font-style: italic;
+                font-size: 0.7885rem;
+                color: darken($text-color, 10%);
+            }
+        }
+
+        .btn-details {
+            margin-top: 0.855rem;
+            padding: 0.4275rem 0.855rem;
+            font-size: 0.8075rem;
+            background: $accent-color;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background: darken($accent-color, 10%);
             }
         }
     }
 }
 
-@media (max-width: 768px) {
+// Мобільні налаштування
+@media (max-width: 600px) {
     .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 1rem;
-        padding: 1rem;
-        
-        .movie-card {
-            .movie-info {
-                padding: 0.75rem;
-                
-                h4 {
-                    font-size: 1rem;
-                    margin-bottom: 0.5rem;
-                }
-                
-                p {
-                    font-size: 0.85rem;
-                    margin: 0.25rem 0;
-                }
-            }
-        }
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 1.33rem;
     }
 }

@@ -1,0 +1,68 @@
+<div *ngIf="movie; " class="movie-details-container">
+  <div class="movie-main">
+    <img class="poster" [src]="'../../../posters/' + movie.PosterImg + '.jpeg'" alt="{{ movie.Title }}">
+      <div class="details">
+        <h1>{{ movie.Title }}</h1>
+          <div class="movie-info-grid">
+            <p><strong>Дата виходу:</strong> {{ movie.ReleaseDate | date:'dd-MM-yyyy' }}</p>
+            <p><strong>Мова:</strong> {{ movie.Language }}</p>
+            <p><strong>Режисер:</strong> {{ movie.Director }}</p>
+            <p><strong>Жанр:</strong> {{ movie.Genre }}</p>
+            <p><strong>Тривалість:</strong> {{ movie.Duration }} хв.</p>
+          </div>
+          <p class="movie-description">
+            <strong>Опис:</strong> 
+            {{ movie.Description }}</p>
+      </div>
+  </div>
+
+
+    <div class="schedule-section">
+    <h2>Розклад сеансів</h2>
+
+  <div class="date-tabs-wrapper">
+    <button class="nav-btn" (click)="prevDate()" [disabled]="!hasPrev()">‹</button>
+    <div class="date-tabs">
+      <button *ngFor="let d of dates" (click)="selectDate(d)" [class.active]="d === selectedDate">
+        {{ d | date:'d MMM, EEEE':'' :'uk' }}
+      </button>
+    </div>
+    <button class="nav-btn" (click)="nextDate()">›</button>
+  </div>
+
+    <!-- Списк сеансів для обраної дати -->
+    <div *ngIf="sessionsForSelected().length; else noSessions" class="session-list">
+      <a
+        *ngFor="let s of sessionsForSelected()"
+        [routerLink]="['/booking', s.SessionID]"
+        class="session-time"
+      >
+        {{ s.StartAt | date:'dd.MM.yyyy, HH:mm' }}
+      </a>
+    </div>
+
+    <!-- Якщо немає сеансів -->
+    <ng-template #noSessions>
+      <p>Сеансів на цю дату ще нема.</p>
+    </ng-template>
+  </div>
+
+  <!-- Інші фільми -->
+  <div class="other-movies">
+    <h2>Дивіться також</h2>
+    <div class="movie-grid">
+      <div *ngFor="let otherMovie of otherMovies" class="movie-card">
+        <a [routerLink]="'/movie/' + otherMovie.MovieID">
+          <img [src]="'../../../posters/' + otherMovie.PosterImg + '.jpeg'" alt="{{ otherMovie.Title }}">
+        </a>
+        <div class="movie-info">
+          <h4><a [routerLink]="'/movie/' + otherMovie.MovieID">{{ otherMovie.Title }}</a></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <p>Фільм не знайдено.</p>
+</ng-template>

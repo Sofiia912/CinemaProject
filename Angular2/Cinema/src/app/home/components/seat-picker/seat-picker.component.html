@@ -1,0 +1,87 @@
+<div class="seat-picker-container">
+    <div class="main-content" *ngIf="sessionInfo">
+        <div class="movie-header">
+            <img class="poster" [src]="'../../../posters/' + sessionInfo.PosterImg + '.jpeg'"
+                alt="{{ sessionInfo.MovieTitle }}" />
+            <div class="movie-info">
+                <h1 class="movie-title">{{ sessionInfo.MovieTitle }}</h1>
+                <div class="badges">
+                    <span class="badge">2D</span>
+                    <span class="badge">SDH</span>
+                </div>
+
+                <div class="details">
+                    <div class="detail">
+                        <i class="fa fa-map-marker"></i>
+                        Львів, ТРЦ "Victoria Gardens"
+                    </div>
+                    <div class="detail">
+                        <i class="fa fa-calendar"></i>
+                        {{ sessionInfo.Date }} • {{ sessionInfo.Time.slice(0,5) }}–
+                        {{ endTime(sessionInfo.Time, sessionInfo.Duration) }}
+                    </div>
+                    <div class="detail">
+                        <i class="fa fa-film"></i>
+                        Зал: {{ sessionInfo.HallName }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item good">
+                <span class="box"></span> GOOD — {{ sessionInfo.PriceGood | number:'1.0-0' }} грн
+            </div>
+            <div class="legend-item lux">
+                <span class="box"></span> SUPER LUX — {{ sessionInfo.PriceLux | number:'1.0-0' }} грн
+            </div>
+        </div>
+
+        <div class="screen"></div>
+
+        <div class="seatmap">
+            <div *ngFor="let row of groupByRow()" class="row">
+                <span class="row-label">Ряд {{ row.row }}</span>
+                <button *ngFor="let seat of row.seats" [disabled]="seat.isBooked"
+                    [class.selected]="selected.includes(seat.SeatID)" [class.lux-seat]="row.row >= getMaxRow() - 1"
+                    (click)="toggle(seat)">
+                    {{ seat.SeatNumber }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Квитки</h2>
+            <div class="summary">
+                {{ tickets.length }} квитк{{ tickets.length>1?'и':'' }},
+                {{ total | number:'1.0-0' }} грн
+            </div>
+        </div>
+
+        <div class="tickets">
+            <div *ngFor="let t of tickets; let i = index" class="ticket-card"
+                [ngClass]="{ good: t.rate==='GOOD', lux: t.rate==='SUPER LUX' }">
+                <button class="close-btn" (click)="remove(selected[i])"><i class="fa fa-times"></i></button>
+                <div class="ticket-header">
+                    <div><i class="fa fa-ticket"></i> {{ t.label }} {{ t.rate }}</div>
+                    <div class="price">{{ t.price | number:'1.0-0' }} грн</div>
+                </div>
+                <div class="ticket-body">
+                    <input type="text" placeholder="Є промокод?" />
+                    <button class="apply-btn"><i class="fa fa-check"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout">
+            <div class="total-to-pay">
+                Всього до сплати: {{ total | number:'1.0-0' }} грн
+            </div>
+            <button class="continue-btn" (click)="confirm()">
+                <i class="fa fa-arrow-right"></i> Продовжити
+            </button>
+        </div>
+    </div>
+</div>

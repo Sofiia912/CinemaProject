@@ -1,0 +1,68 @@
+<div class="profile-wrapper" *ngIf="authSvc.isLoggedIn()">
+    <section class="user-card">
+        <div class="avatar"><i class="fa fa-user-circle"></i></div>
+        <div class="info">
+            <h2>{{ user?.FirstName }} {{ user?.LastName }}</h2>
+            <p>{{ user?.Email }}</p>
+            <button class="btn-logout" (click)="authSvc.logout()">Вийти</button>
+        </div>
+    </section>
+
+    <div class="section-title">Мої квитки</div>
+    <div *ngIf="loading" class="loading">
+        <i class="fa fa-spinner fa-spin"></i> Завантаження…
+    </div>
+    <div *ngIf="error" class="error">
+        <i class="fa fa-exclamation-circle"></i> {{ error }}
+    </div>
+    <div *ngIf="!loading && !bookings.length" class="no-bookings">
+        У вас ще немає квитків.
+    </div>
+
+    <div class="cards-container" *ngIf="bookings.length">
+        <div *ngFor="let b of bookings" class="booking-card">
+    
+            <div class="card-header">
+                <h4 class="movie-title">{{ b.MovieTitle }}</h4>
+                <span class="order-number">#{{ b.BookingID }}</span>
+            </div>
+
+            <div class="dates">
+                <div class="date-item">
+                    <i class="fa fa-calendar"></i>
+                    <span>Операція: {{ fmt(b.CreatedAt) }}</span>
+                </div>
+                <div class="date-item">
+                    <i class="fa fa-clock-o"></i>
+                    <span>Сеанс: {{ fmt(b.StartAt) }}</span>
+                </div>
+
+
+                <div class="detail">
+                    <i class="fa fa-map-marker"></i>
+                    Львів, ТРЦ "Victoria Gardens"          
+                </div>
+            </div>
+
+            <div class="tickets">
+                <div class="ticket-count">
+                    <i class="fa fa-ticket"></i>
+                    <span>Квитків: {{ b.Seats.length }}, 
+                    <i class="fa fa-film"></i>Зал: {{ b.HallID }}</span>
+                </div>
+                <div class="seat-list">
+                    <i class="fa fa-chair"></i>
+                    <span>{{ formatSeats(b.Seats) }}</span>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="price">{{ b.TotalPrice }} ₴</div>
+                <div class="actions">
+                    <button *ngIf="canCancel(b.StartAt)" (click)="cancel(b.BookingID)" class="btn btn-cancel">
+                        <i class="fa fa-times-circle"></i> Скасувати
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

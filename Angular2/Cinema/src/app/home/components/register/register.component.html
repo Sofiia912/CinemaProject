@@ -1,0 +1,75 @@
+<div class="form-container">
+    <h2 class="form-title">Створити акаунт</h2>
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="row">
+            <div class="form-group half" [class.error-state]="firstNameCtrl.invalid && firstNameCtrl.touched">
+                <label for="firstName">Ім'я</label>
+                <input id="firstName" name="FirstName" type="text" placeholder="Ваше ім'я" required minlength="2"
+                    [(ngModel)]="data.FirstName" #firstNameCtrl="ngModel" />
+                <div class="error-message" *ngIf="firstNameCtrl.touched && firstNameCtrl.invalid">
+                    <span *ngIf="firstNameCtrl.errors?.['required']">Обов'язкове</span>
+                    <span *ngIf="firstNameCtrl.errors?.['minlength']">Мін. 2 символи</span>
+                </div>
+            </div>
+            <div class="form-group half" [class.error-state]="lastNameCtrl.invalid && lastNameCtrl.touched">
+                <label for="lastName">Прізвище</label>
+                <input id="lastName" name="LastName" type="text" placeholder="Ваше прізвище" required minlength="2"
+                    [(ngModel)]="data.LastName" #lastNameCtrl="ngModel" />
+                <div class="error-message" *ngIf="lastNameCtrl.touched && lastNameCtrl.invalid">
+                    <span *ngIf="lastNameCtrl.errors?.['required']">Обов'язкове</span>
+                    <span *ngIf="lastNameCtrl.errors?.['minlength']">Мін. 2 символи</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" [class.error-state]="emailCtrl.invalid && emailCtrl.touched">
+            <label for="email">Email</label>
+            <input id="email" name="Email" type="email" placeholder="your@example.com" required email
+                [(ngModel)]="data.Email" #emailCtrl="ngModel" />
+            <div class="error-message" *ngIf="emailCtrl.touched && emailCtrl.invalid">
+                <span *ngIf="emailCtrl.errors?.['required']">Обов'язкове</span>
+                <span *ngIf="emailCtrl.errors?.['email']">Невірний формат email</span>
+            </div>
+        </div>
+
+        <div class="form-group" [class.error-state]="phoneCtrl.invalid && phoneCtrl.touched">
+            <label for="phone">Телефон</label>
+            <input id="phone" name="Phone" type="tel" placeholder="+380 XX XXX XX XX" required pattern="^\+?\d{9,15}$"
+                [(ngModel)]="data.Phone" #phoneCtrl="ngModel" />
+            <div class="error-message" *ngIf="phoneCtrl.touched && phoneCtrl.invalid">
+                <span *ngIf="phoneCtrl.errors?.['required']">Обов'язкове</span>
+                <span *ngIf="phoneCtrl.errors?.['pattern']">Невірний формат телефону</span>
+            </div>
+        </div>
+
+        <div class="form-group" [class.error-state]="passCtrl.invalid && passCtrl.touched">
+            <label for="password">Пароль</label>
+            <input id="password" name="Password" type="password" placeholder="Мінімум 6 символів" required minlength="6"
+                [(ngModel)]="data.Password" #passCtrl="ngModel" />
+            <div class="error-message" *ngIf="passCtrl.touched && passCtrl.invalid">
+                <span *ngIf="passCtrl.errors?.['required']">Обов'язкове</span>
+                <span *ngIf="passCtrl.errors?.['minlength']">Мінімум 6 символів</span>
+            </div>
+        </div>
+
+        <div class="form-group" [class.error-state]="confirmCtrl.invalid && confirmCtrl.touched">
+            <label for="confirm">Підтвердження пароля</label>
+            <input id="confirm" name="confirm" type="password" placeholder="Повторіть пароль" required
+                [(ngModel)]="confirm" #confirmCtrl="ngModel" />
+            <div class="error-message" *ngIf="confirmCtrl.touched">
+                <span *ngIf="confirmCtrl.errors?.['required']">Обов'язкове</span>
+                <span *ngIf="!passwordsMatch && confirmCtrl.dirty">Паролі не співпадають</span>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="form.invalid || !passwordsMatch" class="btn-submit">
+            Зареєструватися
+        </button>
+
+        <div class="global-error" *ngIf="error">{{ error }}</div>
+
+        <p class="alt-link">
+            Вже є акаунт? <a routerLink="/login">Увійти</a>
+        </p>
+    </form>
+</div>

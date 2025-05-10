@@ -1,0 +1,237 @@
+<div class="movie-management">
+  <div class="button-group">
+    <button (click)="toggleSection('movies')" [class.active]="section === 'movies'">
+      <i class="fa fa-film"></i> Фільми
+    </button>
+    <button (click)="toggleSection('sessions')" [class.active]="section === 'sessions'">
+      <i class="fas fa-clock"></i> Сеанси
+    </button>
+  </div>
+
+  <!-- Секція ФІЛЬМИ -->
+  <div *ngIf="section === 'movies'">
+    <h2>Налаштування фільмів</h2>
+
+    <div class="button-group">
+      <button (click)="loadMovies()" [class.active]="!showAddMovieForm && !showEditMovieForm">
+        <i class="fa fa-film"></i> Всі фільми
+      </button>
+      <button (click)="toggleForm('addMovie')" [class.active]="showAddMovieForm">
+        <i class="fa fa-plus-circle"></i> Додати фільм
+      </button>
+    </div>
+
+    <!-- Форма додавання фільму -->
+    <form *ngIf="showAddMovieForm" [formGroup]="addMovieForm" (ngSubmit)="onAddMovie()" class="form">
+      <h3>Додати новий фільм</h3>
+
+      <div class="form-group">
+        <label for="add-title">Назва</label>
+        <input id="add-title" formControlName="Title" placeholder="Введіть назву" />
+      </div>
+      <div class="form-group">
+        <label for="add-date">Дата виходу</label>
+        <input id="add-date" type="date" formControlName="ReleaseDate" />
+      </div>
+      <div class="form-group">
+        <label for="add-genre">Жанр</label>
+        <input id="add-genre" formControlName="Genre" placeholder="Action, Drama" />
+      </div>
+      <div class="form-group">
+        <label for="add-poster">Постер (URL)</label>
+        <input id="add-poster" formControlName="PosterImg" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label for="add-director">Режисер</label>
+        <input id="add-director" formControlName="Director" placeholder="Ім'я режисера" />
+      </div>
+      <div class="form-group">
+        <label for="add-desc">Опис</label>
+        <textarea id="add-desc" formControlName="Description" placeholder="Короткий опис"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="add-duration">Тривалість (хв)</label>
+        <input id="add-duration" type="number" formControlName="Duration" />
+      </div>
+      <div class="form-group">
+        <label for="add-language">Мова</label>
+        <input id="add-language" formControlName="Language" placeholder="Українська" />
+      </div>
+
+      <button type="submit" [disabled]="!addMovieForm.valid">
+        Додати фільм
+      </button>
+    </form>
+
+    <!-- Форма редагування фільму -->
+    <form *ngIf="showEditMovieForm" [formGroup]="editMovieForm" (ngSubmit)="onEditMovie()" class="form">
+      <h3>Редагувати фільм</h3>
+
+      <div class="form-group">
+        <label for="edit-id">ID</label>
+        <input id="edit-id" formControlName="MovieID" readonly />
+      </div>
+      <div class="form-group">
+        <label for="edit-title">Назва</label>
+        <input id="edit-title" formControlName="Title" />
+      </div>
+      <div class="form-group">
+        <label for="edit-date">Дата виходу</label>
+        <input id="edit-date" type="date" formControlName="ReleaseDate" />
+      </div>
+      <div class="form-group">
+        <label for="edit-genre">Жанр</label>
+        <input id="edit-genre" formControlName="Genre" />
+      </div>
+      <div class="form-group">
+        <label for="edit-poster">Постер (URL)</label>
+        <input id="edit-poster" formControlName="PosterImg" />
+      </div>
+      <div class="form-group">
+        <label for="edit-director">Режисер</label>
+        <input id="edit-director" formControlName="Director" />
+      </div>
+      <div class="form-group">
+        <label for="edit-desc">Опис</label>
+        <textarea id="edit-desc" formControlName="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="edit-duration">Тривалість (хв)</label>
+        <input id="edit-duration" type="number" formControlName="Duration" />
+      </div>
+      <div class="form-group">
+        <label for="edit-language">Мова</label>
+        <input id="edit-language" formControlName="Language" />
+      </div>
+
+      <button type="submit" [disabled]="!editMovieForm.valid">
+        Зберегти зміни
+      </button>
+    </form>
+
+    <!-- Таблиця списку фільмів -->
+    <div class="movies-table" *ngIf="!showAddMovieForm && !showEditMovieForm">
+      <h3>Список фільмів</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Назва</th>
+            <th>Дата</th>
+            <th>Жанр</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of movies">
+            <td>{{ m.MovieID }}</td>
+            <td>{{ m.Title }}</td>
+            <td>{{ m.ReleaseDate | date: 'dd.MM.yyyy' }}</td>
+            <td>{{ m.Genre.join(', ') }}</td>
+            <td>
+              <button (click)="prefillEdit(m)">Редагувати</button>
+              <button (click)="onDeleteMovie(m.MovieID)">Видалити</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+ 
+</div>
+  <div *ngIf="section==='sessions'">
+    <h2>Налаштування сеансів</h2>
+  
+    <div class="button-group">
+      <button (click)="toggleSessionForm('list')" [class.active]="sessionForm==='list'">
+        Всі сеанси
+      </button>
+      <button (click)="toggleSessionForm('add')" [class.active]="sessionForm==='add'">
+        Додати сеанс
+      </button>
+    </div>
+  
+    <!-- Список сеансів -->
+    <div *ngIf="sessionForm==='list'" class="sessions-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Фільм</th>
+            <th>Старт</th>
+            <th>Ціна</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of sessions">
+            <td>{{ s.SessionID }}</td>
+            <td>{{ s.MovieTitle }}</td>
+            <td>{{ s.StartAt | date:'dd.MM.yyyy HH:mm' }}</td>
+            <td>{{ s.Price }}₴</td>
+            <td>
+              <button (click)="prefillEditSession(s)">Редагувати</button>
+              <button (click)="onDeleteSession(s.SessionID)">Видалити</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Форма додавання сеансу -->
+    <form *ngIf="sessionForm==='add'" [formGroup]="addSessionForm" (ngSubmit)="onAddSession()" class="form">
+      <h3>Додати новий сеанс</h3>
+      <div class="form-group">
+        <label>MovieID:</label>
+        <input type="number" formControlName="MovieID">
+      </div>
+      <div class="form-group">
+        <label>StartAt:</label>
+        <input type="datetime-local" formControlName="StartAt">
+      </div>
+      <div class="form-group">
+        <label>HallID:</label>
+        <input type="number" formControlName="HallID">
+      </div>
+    <div class="form-group">
+      <label>PriceGood:</label>
+      <input type="number" formControlName="PriceGood" step="0.01">
+    </div>
+    <div class="form-group">
+      <label>PriceLux:</label>
+      <input type="number" formControlName="PriceLux" step="0.01">
+    </div>
+      <button type="submit" [disabled]="!addSessionForm.valid">Додати</button>
+    </form>
+  
+    <!-- Форма редагування сеансу -->
+    <form *ngIf="sessionForm==='edit'" [formGroup]="editSessionForm" (ngSubmit)="onEditSession()" class="form">
+      <h3>Редагувати сеанс</h3>
+      <div class="form-group">
+        <label>ID:</label>
+        <input formControlName="SessionID" readonly>
+      </div>
+      <div class="form-group">
+        <label>MovieID:</label>
+        <input type="number" formControlName="MovieID">
+      </div>
+      <div class="form-group">
+        <label>StartAt:</label>
+        <input type="datetime-local" formControlName="StartAt">
+      </div>
+      <div class="form-group">
+        <label>HallID:</label>
+        <input type="number" formControlName="HallID">
+      </div>
+      <div class="form-group">
+        <label>PriceGood:</label>
+        <input type="number" formControlName="PriceGood" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>PriceLux:</label>
+        <input type="number" formControlName="PriceLux" step="0.01">
+      </div>
+      <button type="submit" [disabled]="!editSessionForm.valid">Зберегти</button>
+    </form>
+  </div>
+  
+</div>

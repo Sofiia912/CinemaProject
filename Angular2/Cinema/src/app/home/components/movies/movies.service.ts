@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { MovieListItem } from "./movies.type";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
 
-//Сервіс для зв'язки з сервером та отримання інфи про фільми
 @Injectable()
 export class MoviesService {
 
@@ -14,16 +14,33 @@ export class MoviesService {
     //Запит на отримання всіх фільмів з сервера
     getMoviesList(): Observable<MovieListItem[]> {
         return this.httpClient.get<MovieListItem[]>(
-            'http://localhost:5001/movies'
+            `${this.apiUrl}`
         );
     }
     
     //Запит на отримання фільмів за рядком пошуку
-    getMovieByName(term: string): Observable<MovieListItem[]> {
-        return this.httpClient.get<MovieListItem[]>(
-            `${this.apiUrl}/search/${term}`
-        );
-    }
+      getMovieByName(term: string): Observable<MovieListItem[]> {
+    return this.httpClient
+      .get<MovieListItem[]>(`${this.apiUrl}/search/${term}`)
+      .pipe(
+        catchError(err => {
+          // якщо 404 або будь-яка інша помилка — повертаємо порожній масив
+          console.warn('Помилка пошуку за назвою:', err.message || err.status);
+          return of([]);
+        })
+      );
+  }
+    getMovieByKeyWord(term: string): Observable<MovieListItem[]> {
+    return this.httpClient
+      .get<MovieListItem[]>(`${this.apiUrl}/search/keyword/${term}`)
+      .pipe(
+        catchError(err => {
+          console.warn('Помилка пошуку за ключовим словом:', err.message || err.status);
+          return of([]);
+        })
+      );
+  }
+
 
     //Запит на отримання деталей фільму за ID
     getMovieById(MovieID: string): Observable<MovieListItem> {

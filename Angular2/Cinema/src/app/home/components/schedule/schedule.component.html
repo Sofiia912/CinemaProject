@@ -1,0 +1,35 @@
+<div class="schedule-container">
+
+    <div class="date-tabs-wrapper">
+        <button class="nav-btn" (click)="prevDate()" [disabled]="!hasPrev()">‹</button>
+
+        <div class="date-tabs">
+            <button *ngFor="let d of dates" (click)="selectDate(d)" [class.active]="d === selectedDate">
+                {{ d | date:'d MMM, EEEE':'' :'uk' }}
+            </button>
+        </div>
+
+        <button class="nav-btn" (click)="nextDate()">›</button>
+    </div>
+
+    <div *ngIf="!sessionsForSelected().length" class="no-sessions">
+        Сеансів на цю дату ще нема.
+    </div>
+
+    <div class="sessions-grid" *ngIf="sessionsForSelected().length">
+        <div *ngFor="let s of sessionsForSelected()" class="session-card">
+            <div class="poster-wrapper">
+                <img *ngIf="s.PosterImg" [src]="'../../../posters/' + s.PosterImg + '.jpeg'"
+                    alt="{{ s.MovieTitle }} постер" class="poster" />
+                <div *ngIf="!s.PosterImg" class="no-image">Зображення недоступне</div>
+            </div>
+
+            <div class="info">
+                <h3>{{ s.MovieTitle }}</h3>
+                <button class="session-button" (click)="book(s)">
+                    {{ s.StartAt | date:'shortTime':'':'uk' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

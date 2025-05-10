@@ -1,95 +1,187 @@
 const express = require('express');
 const pool = require('./database');
+const { authenticate, authorizeRoles } = require('./auth');
+require('dotenv').config();
+
 const movies = express.Router();
 
-// Отримати всі фільми
+// усі фільми 
 movies.get('/', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM movies');
-        res.status(200).json(rows);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    const [rows] = await pool.query('SELECT * FROM movies');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// // Update movie
-movies.put('/:MovieID', async (req, res) => {
+// пошук фільмів за назвою 
+movies.get('/search/:title', async (req, res) => {
   try {
-    const { Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language } = req.body;
-    await pool.query(
-      'UPDATE movies SET Title = ?, Description = ?, Duration = ?, Genre = ?, ReleaseDate = ?, Director = ?, PosterImg = ?, Language = ? WHERE MovieID = ?',
-      [Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language, req.params.MovieID]
+    const searchTerm = `%${req.params.title}%`;
+    const [results] = await pool.query(
+      'SELECT * FROM movies WHERE Title LIKE ?', 
+      [searchTerm]
     );
-    const [updatedMovie] = await pool.query('SELECT * FROM movies WHERE MovieID = ?', [req.params.MovieID]);
-    res.json(updatedMovie[0]);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(200).json(results);
+  } catch (err) {
+    console.error('Помилка при пошуку за назвою:', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 
-//  стоворення нового фільму new 
-movies.post('/', async (req, res) => {
+// пошук фільмів за ключовим словом 
+movies.get('/search/keyword/:keyword', async (req, res) => {
   try {
-      const { Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language } = req.body;
-
-      const [result] = await pool.query(
-          'INSERT INTO movies (Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language]
-      );
-      const [newMovie] = await pool.query('SELECT * FROM movies WHERE MovieID = ?', [result.insertId]);
-      res.status(200).json(newMovie[0]);
-  } catch (error) {
-      res.status(500).json({ message: error.message });
+    const kw = `%${req.params.keyword}%`;
+    const [results] = await pool.query(
+      'SELECT * FROM movies WHERE keywords LIKE ?', 
+      [kw]
+    );
+    return res.status(200).json(results);
+  } catch (err) {
+    console.error('Помилка при пошуку за ключовим словом:', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 
-// видалення 
-movies.delete('/:MovieID', async (req, res) => {
-  try {
-      const { MovieID } = req.params;
-      const [result] = await pool.query('DELETE FROM movies WHERE MovieID = ?', [MovieID]);
-      if (result.affectedRows === 0) {
-          return res.status(404).json({ message: `Фільм з ID ${MovieID} не знайдено.` });
-      }
-      res.status(200).json({ message: `Фільм з ID ${MovieID} успішно видалено.` });
-  } catch (error) {
-      res.status(500).json({ message: error.message });
-  }
-});
-
-
-// Пошук фільмів за назвою
-movies.get('/search/:title', async (req, res) => { 
-    try {
-        const searchTerm = `%${req.params.title}%`;
-        console.log('Пошук фільму за назвою:', req.params.title); // Логування
-        const [results] = await pool.query('SELECT * FROM movies WHERE Title LIKE ?', [searchTerm]);
-        
-        if (results.length === 0) {
-            return res.status(404).json({ message: "Фільми не знайдено" });
-        }
-
-        res.status(200).json(results);
-    } catch (error) {
-        console.error("Помилка при пошуку:", error);
-        res.status(500).json({ message: error.message });
-    }
-});
-
-
-// Маршрут для отримання фільму за ID
+// фільм за ID 
 movies.get('/:MovieID', async (req, res) => {
-    try {
-        const { MovieID } = req.params;
-        const [result] = await pool.query('SELECT * FROM movies WHERE MovieID = ?', [MovieID]);
-
-        if (result.length === 0) {
-            return res.status(404).json({ message: 'Фільм не знайдено' });
-        }
-        res.json(result[0]); // Повертаємо об'єкт фільму
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  try {
+    const { MovieID } = req.params;
+    const [rows] = await pool.query(
+      'SELECT * FROM movies WHERE MovieID = ?',
+      [MovieID]
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Фільм не знайдено' });
     }
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
+// створити фільм — тільки admin
+movies.post(
+  '/',
+  authenticate,
+  authorizeRoles('admin'),
+  async (req, res) => {
+    try {
+      const {
+        Title,
+        Description,
+        Duration,
+        Genre,
+        ReleaseDate,
+        Director,
+        PosterImg,
+        Language,
+        keywords
+      } = req.body;
+      const [result] = await pool.query(
+        `INSERT INTO movies
+           (Title, Description, Duration, Genre, ReleaseDate, Director, PosterImg, Language, keywords)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          Title,
+          Description,
+          Duration,
+          Genre,
+          ReleaseDate,
+          Director,
+          PosterImg,
+          Language,
+          keywords
+        ]
+      );
+      const [[newMovie]] = await pool.query(
+        'SELECT * FROM movies WHERE MovieID = ?',
+        [result.insertId]
+      );
+      res.status(201).json(newMovie);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// оновити фільм — тільки admin
+movies.put(
+  '/:MovieID',
+  authenticate,
+  authorizeRoles('admin'),
+  async (req, res) => {
+    try {
+      const { MovieID } = req.params;
+      const {
+        Title,
+        Description,
+        Duration,
+        Genre,
+        ReleaseDate,
+        Director,
+        PosterImg,
+        Language,
+        keywords
+      } = req.body;
+      await pool.query(
+        `UPDATE movies SET
+           Title       = ?,
+           Description = ?,
+           Duration    = ?,
+           Genre       = ?,
+           ReleaseDate = ?,
+           Director    = ?,
+           PosterImg   = ?,
+           Language    = ?,
+           keywords    = ?
+         WHERE MovieID = ?`,
+        [
+          Title,
+          Description,
+          Duration,
+          Genre,
+          ReleaseDate,
+          Director,
+          PosterImg,
+          Language,
+          keywords,
+          MovieID
+        ]
+      );
+      const [[updated]] = await pool.query(
+        'SELECT * FROM movies WHERE MovieID = ?',
+        [MovieID]
+      );
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// DELETE фільму — тільки admin
+movies.delete(
+  '/:MovieID',
+  authenticate,
+  authorizeRoles('admin'),
+  async (req, res) => {
+    try {
+      const { MovieID } = req.params;
+      const [result] = await pool.query(
+        'DELETE FROM movies WHERE MovieID = ?',
+        [MovieID]
+      );
+      if (!result.affectedRows) {
+        return res.status(404).json({ error: 'Фільм не знайдено' });
+      }
+      res.json({ message: 'Фільм видалено' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
 
 module.exports = movies;
